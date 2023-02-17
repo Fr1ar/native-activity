@@ -27,7 +27,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -87,17 +86,15 @@ public class DefoldActivity extends NativeActivity {
      * https://developer.android.com/training/system-ui/immersive.html
      */
     private void updateFullscreenMode() {
-        Log.d("DefoldActivity", "updateFullscreenMode()");
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (mImmersiveMode) {
                 getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -126,10 +123,10 @@ public class DefoldActivity extends NativeActivity {
      * not copied over to the corresponding native AInputEvent.
      * Therefore it is implemented in android_window.c so that the characters can be sent to glfw.
      */
-    public native void FakeBackspace();
-    public native void FakeEnter();
-    public native void glfwInputCharNative(int unicode);
-    public native void glfwSetMarkedTextNative(String text);
+    // public native void FakeBackspace();
+    // public native void FakeEnter();
+    // public native void glfwInputCharNative(int unicode);
+    // public native void glfwSetMarkedTextNative(String text);
 
     private class DefoldInputWrapper extends InputConnectionWrapper {
         private DefoldActivity _ctx;
@@ -479,10 +476,10 @@ public class DefoldActivity extends NativeActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        nativeOnActivityResult(this, requestCode,resultCode, data);
+        // nativeOnActivityResult(this, requestCode,resultCode, data);
     }
 
-    public static native void nativeOnActivityResult(Activity activity, int requestCode, int resultCode, Intent data);
+    // public static native void nativeOnActivityResult(Activity activity, int requestCode, int resultCode, Intent data);
 
     /**
      * Method to get device ids for any connected gamepads, joysticks etc
@@ -496,9 +493,9 @@ public class DefoldActivity extends NativeActivity {
             int sources = device.getSources();
             // filter out only gamepads, joysticks and things which has a dpad
             if (((sources & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD) ||
-                ((sources & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK) ||
-                ((sources & InputDevice.SOURCE_DPAD) == InputDevice.SOURCE_DPAD)) {
-                    mGameControllerDeviceIds.add(deviceId);
+                    ((sources & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK) ||
+                    ((sources & InputDevice.SOURCE_DPAD) == InputDevice.SOURCE_DPAD)) {
+                mGameControllerDeviceIds.add(deviceId);
             }
         }
 
