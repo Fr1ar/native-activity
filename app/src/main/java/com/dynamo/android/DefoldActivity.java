@@ -47,6 +47,10 @@ import java.util.ArrayList;
 
 import android.content.pm.PackageInfo;
 
+
+// https://github.com/defold/defold/blob/master/engine/glfw/java/com/dynamo/android/DefoldActivity.java
+
+// https://github.com/defold/defold/blob/master/engine/glfw/lib/android/android_window.c
 public class DefoldActivity extends NativeActivity {
 
     // Must match values from sys.h
