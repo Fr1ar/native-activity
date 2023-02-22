@@ -78,7 +78,9 @@ static int engine_init_display(struct engine* engine) {
                             EGL_BLUE_SIZE,    8,
                             EGL_GREEN_SIZE,   8,
                             EGL_RED_SIZE,     8,
-                            EGL_NONE};
+                            EGL_ALPHA_SIZE,   8,
+                            EGL_NONE
+  };
   EGLint w, h, format;
   EGLint numConfigs;
   EGLConfig config = nullptr;
@@ -86,7 +88,6 @@ static int engine_init_display(struct engine* engine) {
   EGLContext context;
 
   EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-
   eglInitialize(display, nullptr, nullptr);
 
   /* Here, the application chooses the configuration it desires.
@@ -169,7 +170,7 @@ static void engine_draw_frame(struct engine* engine) {
   }
 
   // Just fill the screen with a color.
-  glClearColor(0.0f, 0.0f, 0.5f, 1.0f);
+  glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
 
   glClear(GL_COLOR_BUFFER_BIT);
 
