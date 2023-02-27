@@ -13,6 +13,8 @@
 // specific language governing permissions and limitations under the License.
 
 
+// https://stackoverflow.com/questions/27101984/how-to-hook-system-calls-of-my-android-app
+
 package com.dynamo.android;
 
 import android.app.Activity;

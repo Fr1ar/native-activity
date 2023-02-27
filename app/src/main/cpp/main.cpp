@@ -102,12 +102,13 @@ static int engine_init_display(struct engine* engine) {
   auto i = 0;
   for (; i < numConfigs; i++) {
     auto& cfg = supportedConfigs[i];
-    EGLint r, g, b, d;
+    EGLint r, g, b, a, d;
     if (eglGetConfigAttrib(display, cfg, EGL_RED_SIZE, &r) &&
         eglGetConfigAttrib(display, cfg, EGL_GREEN_SIZE, &g) &&
         eglGetConfigAttrib(display, cfg, EGL_BLUE_SIZE, &b) &&
-        eglGetConfigAttrib(display, cfg, EGL_DEPTH_SIZE, &d) && r == 8 &&
-        g == 8 && b == 8 && d == 0) {
+        eglGetConfigAttrib(display, cfg, EGL_ALPHA_SIZE, &a) &&
+        eglGetConfigAttrib(display, cfg, EGL_DEPTH_SIZE, &d) &&
+        r == 8 && g == 8 && b == 8 && a == 8 && d == 0) {
       config = supportedConfigs[i];
       break;
     }
@@ -170,7 +171,7 @@ static void engine_draw_frame(struct engine* engine) {
   }
 
   // Just fill the screen with a color.
-  glClearColor(0.0f, 0.0f, 0.5f, 0.0f);
+  glClearColor(0.0f, 0.8f, 0.0f, 0.0f);
 
   glClear(GL_COLOR_BUFFER_BIT);
 
