@@ -5,7 +5,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -71,7 +75,7 @@ public class FakeWebViewActivity extends Activity {
 
     public static final String TAG = "HiddenWebViewLog";
 
-    //private static final long ACTIVITY_DETECT_DELAY_MS = 10;
+    private static final long ACTIVITY_DETECT_DELAY_MS = 10;
     public static boolean webViewActive = false;
 
     public void onPageLoading(String url, int id) {
@@ -198,9 +202,11 @@ public class FakeWebViewActivity extends Activity {
             new Runnable() {
                 public void run() {
                     // openWebViewActivity();
+                    setTouchInterceptor(2000, 2000, 0, 0);
+                    changeVisibility(1);
                 }
             },
-        5000);
+        2000);
 
 
         initWebView();
@@ -307,14 +313,14 @@ public class FakeWebViewActivity extends Activity {
         htmlGameView.setWebChromeClient(customWebChromeClient);
         htmlGameView.setWebViewClient(customWebViewClient);
 
-        // htmlGameView.setVisibility(View.GONE);
+        htmlGameView.setVisibility(View.GONE);
 
         mainContainer.addView(htmlGameView, params);
 
         loadGame("/GAME_PATH_DUMMY", 1);
 
         // TODO: REMOVE THIS CODE!!!!
-        openWebViewActivity();
+        // openWebViewActivity();
         WebView.setWebContentsDebuggingEnabled(true);
         // TODO: REMOVE THIS CODE!!!!
 
@@ -323,7 +329,6 @@ public class FakeWebViewActivity extends Activity {
     }
 
     public static void acceptTouchEvents(int accept) {
-        /*
         Log.d(TAG, "FakeWebViewActivity.acceptTouchEvents");
 
         if (touchInterceptorView == null) {
@@ -344,7 +349,6 @@ public class FakeWebViewActivity extends Activity {
 
             wm.removeViewImmediate(touchInterceptorView);
         }
-        */
     }
 
     private static float dpToPx(double dp) {
@@ -453,22 +457,23 @@ public class FakeWebViewActivity extends Activity {
     }
 
     public static void setTouchInterceptor(double height, double width, double x, double y) {
-    /*
         Log.d(TAG, "FakeWebViewActivity.setTouchInterceptor");
 
+        Activity activity = CurrentActivityAwareApplication.currentlyOpenedActivity;
+        WindowManager wm = activity.getWindowManager();
+
         if (touchInterceptorView != null) {
-            WindowManager wm = CurrentActivityAwareApplication.currentlyOpenedActivity.getWindowManager();
             wm.removeViewImmediate(touchInterceptorView);
         }
 
-        Display display = CurrentActivityAwareApplication.currentlyOpenedActivity.getWindowManager().getDefaultDisplay();
+        Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int screenWidth = size.x;
         int screenHeight = size.y;
 
         touchInterceptorView = new TouchInterceptorView(CurrentActivityAwareApplication.currentlyOpenedActivity);
-        touchInterceptorView.setBackground(new ColorDrawable(Color.TRANSPARENT));
+        touchInterceptorView.setBackground(new ColorDrawable(Color.GRAY)); // TRANSPARENT
 
         touchInterceptorViewParams = new WindowManager.LayoutParams();
         touchInterceptorViewParams.gravity = Gravity.TOP | Gravity.START;
@@ -478,11 +483,9 @@ public class FakeWebViewActivity extends Activity {
         touchInterceptorViewParams.height = (int) dpToPx(screenHeight * height);
         touchInterceptorViewParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         touchInterceptorViewParams.alpha = 0.0f;
-        touchInterceptorViewParams.format = PixelFormat.TRANSLUCENT;
+        // touchInterceptorViewParams.format = PixelFormat.TRANSLUCENT;
 
-        WindowManager wm = CurrentActivityAwareApplication.currentlyOpenedActivity.getWindowManager();
         wm.addView(touchInterceptorView, touchInterceptorViewParams);
-    */
     }
 
     public static void setPositionAndSize(double height, double width, double x, double y) {
@@ -605,22 +608,22 @@ public class FakeWebViewActivity extends Activity {
         // не работает с DefoldActivity
         // НО! работает с NativeActivity
 
-        //(new Handler()).postDelayed(() -> {
-        //    try {
-        //        Activity topLevelActivity = CurrentActivityAwareApplication.currentlyOpenedActivity;
-        //        final View viewGroup = topLevelActivity.getWindow().getDecorView();
-        //
-        //        viewGroup.setOnTouchListener((View v, MotionEvent event) -> {
-        //            if (webViewActive) {
-        //                htmlGameView.onTouchEvent(event);
-        //            }
-        //
-        //            return false;
-        //        });
-        //    } catch (Exception e) {
-        //        e.printStackTrace();
-        //    }
-        //}, ACTIVITY_DETECT_DELAY_MS);
+        (new Handler()).postDelayed(() -> {
+            try {
+                Activity topLevelActivity = CurrentActivityAwareApplication.currentlyOpenedActivity;
+                final View viewGroup = topLevelActivity.getWindow().getDecorView();
+
+                viewGroup.setOnTouchListener((View v, MotionEvent event) -> {
+                    if (webViewActive) {
+                        htmlGameView.onTouchEvent(event);
+                    }
+
+                    return false;
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, ACTIVITY_DETECT_DELAY_MS);
     }
 
     @Override
