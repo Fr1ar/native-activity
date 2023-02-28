@@ -202,7 +202,7 @@ public class FakeWebViewActivity extends Activity {
             new Runnable() {
                 public void run() {
                     // openWebViewActivity();
-                    setTouchInterceptor(2000, 2000, 0, 0);
+                    setTouchInterceptor(3000, 3000, 0, 0);
                     changeVisibility(1);
                 }
             },
@@ -476,14 +476,17 @@ public class FakeWebViewActivity extends Activity {
         touchInterceptorView.setBackground(new ColorDrawable(Color.GRAY)); // TRANSPARENT
 
         touchInterceptorViewParams = new WindowManager.LayoutParams();
-        touchInterceptorViewParams.gravity = Gravity.TOP | Gravity.START;
+        touchInterceptorViewParams.gravity = Gravity.CENTER;
         touchInterceptorViewParams.x = (int) dpToPx(screenWidth * x);
         touchInterceptorViewParams.y = (int) dpToPx(screenHeight * y);
         touchInterceptorViewParams.width = (int) dpToPx(screenWidth * width);
         touchInterceptorViewParams.height = (int) dpToPx(screenHeight * height);
         touchInterceptorViewParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            touchInterceptorViewParams.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        }
         touchInterceptorViewParams.alpha = 0.0f;
-        // touchInterceptorViewParams.format = PixelFormat.TRANSLUCENT;
+        touchInterceptorViewParams.format = PixelFormat.TRANSLUCENT;
 
         wm.addView(touchInterceptorView, touchInterceptorViewParams);
     }

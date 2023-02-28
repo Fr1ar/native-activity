@@ -78,7 +78,7 @@ static int engine_init_display(struct engine* engine) {
                             EGL_BLUE_SIZE,    8,
                             EGL_GREEN_SIZE,   8,
                             EGL_RED_SIZE,     8,
-                            EGL_ALPHA_SIZE,   8,
+                            // EGL_ALPHA_SIZE,   8,
                             EGL_NONE
   };
   EGLint w, h, format;
@@ -171,7 +171,7 @@ static void engine_draw_frame(struct engine* engine) {
   }
 
   // Just fill the screen with a color.
-  glClearColor(0.0f, 0.8f, 0.0f, 0.0f);
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
   glClear(GL_COLOR_BUFFER_BIT);
 
