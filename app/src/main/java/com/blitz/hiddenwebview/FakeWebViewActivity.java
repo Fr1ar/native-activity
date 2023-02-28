@@ -472,14 +472,16 @@ public class FakeWebViewActivity extends Activity {
         int screenWidth = size.x;
         int screenHeight = size.y;
 
-        touchInterceptorView = new TouchInterceptorView(CurrentActivityAwareApplication.currentlyOpenedActivity);
+        Log.d(TAG, "FakeWebViewActivity.setTouchInterceptor: " + activity.getLocalClassName());
+
+        touchInterceptorView = new TouchInterceptorView(activity);
         touchInterceptorView.setBackground(new ColorDrawable(Color.GRAY)); // TRANSPARENT
 
         touchInterceptorViewParams = new WindowManager.LayoutParams();
         touchInterceptorViewParams.gravity = Gravity.CENTER;
         touchInterceptorViewParams.x = (int) dpToPx(screenWidth * x);
         touchInterceptorViewParams.y = (int) dpToPx(screenHeight * y);
-        touchInterceptorViewParams.width = (int) dpToPx(screenWidth * width);
+        touchInterceptorViewParams.width =  (int) dpToPx(screenWidth * width);
         touchInterceptorViewParams.height = (int) dpToPx(screenHeight * height);
         touchInterceptorViewParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -611,6 +613,7 @@ public class FakeWebViewActivity extends Activity {
         // не работает с DefoldActivity
         // НО! работает с NativeActivity
 
+        /*
         (new Handler()).postDelayed(() -> {
             try {
                 Activity topLevelActivity = CurrentActivityAwareApplication.currentlyOpenedActivity;
@@ -627,6 +630,7 @@ public class FakeWebViewActivity extends Activity {
                 e.printStackTrace();
             }
         }, ACTIVITY_DETECT_DELAY_MS);
+        */
     }
 
     @Override
