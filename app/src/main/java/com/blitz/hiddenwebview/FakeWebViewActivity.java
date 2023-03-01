@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -28,7 +27,6 @@ import android.view.Display;
 import android.util.Log;
 import android.os.Build;
 import android.content.res.Configuration;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -52,9 +50,24 @@ class TouchInterceptorView extends View {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (isAcceptingTouchEvents) {
-            FakeWebViewActivity.htmlGameView.dispatchTouchEvent(event);
+            dispatchModifiedMotionEvent(event);
         }
         return false;
+    }
+
+    protected boolean dispatchModifiedMotionEvent(MotionEvent event) {
+        int[] location = new int[2];
+        getLocationOnScreen(location);
+        int offsetX = location[0];
+        int offsetY = location[1];
+
+        MotionEvent hackedEvent = MotionEvent.obtain(event.getDownTime(),
+            event.getEventTime(), event.getAction(), event.getX() + offsetX,
+            event.getY() + offsetY, event.getMetaState());
+
+        boolean result = FakeWebViewActivity.htmlGameView.dispatchTouchEvent(hackedEvent);
+        hackedEvent.recycle();
+        return result;
     }
 }
 
@@ -202,7 +215,7 @@ public class FakeWebViewActivity extends Activity {
             new Runnable() {
                 public void run() {
                     // openWebViewActivity();
-                    setTouchInterceptor(3000, 3000, 0, 0);
+                    setTouchInterceptor(0.05, 1.0, 0, 0);
                     changeVisibility(1);
                 }
             },
@@ -487,7 +500,7 @@ public class FakeWebViewActivity extends Activity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             touchInterceptorViewParams.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
         }
-        touchInterceptorViewParams.alpha = 0.0f;
+        touchInterceptorViewParams.alpha = 0.5f;
         touchInterceptorViewParams.format = PixelFormat.TRANSLUCENT;
 
         wm.addView(touchInterceptorView, touchInterceptorViewParams);
